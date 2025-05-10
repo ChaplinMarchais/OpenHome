@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "C:\\Users\\chapm\\Harvard\\CS50\\Final\\OpenHome_1\\OpenHome\\venv\\lib64\\python3.10\\site-packages"
+    ]
+}
