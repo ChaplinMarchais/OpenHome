@@ -4,3 +4,4 @@ venv
 *.iml
 .directory
 .idea
+__pycache__
