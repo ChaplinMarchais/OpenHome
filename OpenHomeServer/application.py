@@ -5,7 +5,7 @@ from urllib.parse import quote_plus, urlencode
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
-from flask import Flask, redirect, render_template, session, url_for
+from flask import Flask, redirect, render_template, session, url_for, request
 from flask_sock import Sock, ConnectionClosed
 from helpers import *
 from database import *
@@ -47,12 +47,13 @@ def connect(ws):
                 case "connect":
                     device_id = generate_device_id(db, data["device_code"])
                     connections[device_id] = ws
-
+                    connect_device(db, data["device_code"], data["name"])
                     print(f"Device {device_id} CONNECTED")
 
         except ConnectionClosed:
             connections[device_id] = None
             connectionOpen = False
+            disconnect_device(db, data["device_code"], data["name"])
             print(f"Device {device_id} DISCONNECTED")
             pass
 
@@ -64,6 +65,12 @@ def home():
         session=session.get("user"),
         pretty=json.dumps(session.get("user"), indent=4),
     )
+
+@app.route("/devices", methods=["GET", "POST"])
+@login_required
+def devices():
+    if request.method == "GET":
+        return render_template("devices.html", devices = get_devices(db, session.get("user")))
 
 
 @app.route("/callback", methods=["GET", "POST"])
