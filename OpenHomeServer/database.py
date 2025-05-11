@@ -33,6 +33,7 @@ def get_user_sub(db, device_code):
 
 def connect_device(db, device_code, name):
     openid_sub = get_user_sub(db, device_code)
+    # Utilize the UPSERT pattern from SQLite3 docs to allow for an Insert or Update with minimal overhead
     query(db, 'INSERT INTO Devices (id, openid_sub, name, status) VALUES ((SELECT id FROM Devices WHERE openid_sub = ? AND name = ?), ?, ?, "connected") ON CONFLICT(id) DO UPDATE SET status = "connected"',
           params = (openid_sub, name, openid_sub, name))
     

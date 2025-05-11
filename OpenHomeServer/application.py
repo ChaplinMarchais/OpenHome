@@ -43,6 +43,7 @@ def connect(ws):
         try:
             data = json.loads(ws.receive())
 
+            # If the action in the payload is connect then register the device with the db and update it's status if it already exists
             match data["action"]:
                 case "connect":
                     device_id = generate_device_id(db, data["device_code"])
@@ -50,6 +51,7 @@ def connect(ws):
                     connect_device(db, data["device_code"], data["name"])
                     print(f"Device {device_id} CONNECTED")
 
+        # Listen for the ConnectionClosed exception in order to gracefully cleanup the devices
         except ConnectionClosed:
             connections[device_id] = None
             connectionOpen = False
@@ -66,7 +68,7 @@ def home():
         pretty=json.dumps(session.get("user"), indent=4),
     )
 
-@app.route("/devices", methods=["GET", "POST"])
+@app.route("/devices", methods=["GET"])
 @login_required
 def devices():
     if request.method == "GET":
