@@ -6,8 +6,8 @@ from urllib.parse import quote_plus, urlencode
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
 from flask import Flask, redirect, render_template, session, url_for
-from flask_sock import Sock
-from helpers import login_required, query
+from flask_sock import Sock, ConnectionClosed
+from helpers import *
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
@@ -18,6 +18,7 @@ app.secret_key = env.get("APP_SECRET_KEY")
 sock = Sock(app)
 
 db = env.get("DB_CONNECTION")
+connections = {}
 
 oauth = OAuth(app)
 
@@ -34,9 +35,23 @@ oauth.register(
 # WS Controllers
 @sock.route('/connect')
 def connect(ws):
-    while True:
-        data = ws.receive()
-        print(data)
+    data = {}
+    device_id = ""
+    connectionOpen = True
+    while connectionOpen:
+        try:
+            data = json.loads(ws.receive())
+            device_code = data["device_code"]
+            openid_sub = get_user_sub(db, device_code)
+            device_id = generate_device_id(device_code, openid_sub)
+            connections[device_id] = ws
+
+            print(f"Device {device_id} CONNECTED")
+        except ConnectionClosed:
+            connections[device_id] = None
+            connectionOpen = False
+            print(f"Device {device_id} DISCONNECTED")
+            pass
 
 # Controllers API
 @app.route("/")
@@ -60,7 +75,6 @@ def callback():
         device_code = str(uuid.uuid4())
         query(db, "INSERT INTO Users (openid_sub, email, device_code) VALUES (?, ?, ?)", (openid_sub, session["user"]["userinfo"]["email"], device_code))
     else:
-        print(user[0]["device_code"])
         session["user"]["userinfo"]["device_code"] = user[0]["device_code"]
 
     return redirect("/")

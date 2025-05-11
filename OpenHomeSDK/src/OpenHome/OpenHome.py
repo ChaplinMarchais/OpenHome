@@ -13,5 +13,7 @@ async def connect(device_code, name):
     async with websockets.connect(DEBUG_URI) as ws:
         print("Connected to server")
         await ws.send(json.dumps(data), text=True)
+        msg = await ws.recv()
+        print(f"Received: {msg}")
 
     print("Disconnected")

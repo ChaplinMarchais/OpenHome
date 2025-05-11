@@ -46,3 +46,11 @@ def query(db_name, query, params=None):
     except sqlite3.Error as e:
         print(f"Database error: {e}")
         return None
+
+def get_user_sub(db_name, device_code):
+    return query(db_name, 'SELECT openid_sub FROM Users WHERE device_code = ?', params = (device_code,))[0]["openid_sub"]
+
+def generate_device_id(device_code, openid_sub):
+    return f"{device_code}:{openid_sub}"
+
+def register_device
