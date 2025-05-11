@@ -1,0 +1,10 @@
+{
+    "python.analysis.include": [
+        "C:\\Users\\chapm\\Harvard\\CS50\\Final\\OpenHome\\OpenHomeServer\\venv\\lib64\\python3.10\\site-packages",
+        "C:\\Users\\chapm\\Harvard\\CS50\\Final\\OpenHome\\OpenHomeServer\\venv\\lib\\python3.10\\site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "./OpenHomeServer/venv/lib64/python3.10/site-packages",
+        "./OpenHomeServer"
+    ]
+}
