@@ -1,11 +1,12 @@
 import json
+import uuid
 from os import environ as env
 from urllib.parse import quote_plus, urlencode
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
 from flask import Flask, redirect, render_template, session, url_for
-from helpers import login_required
+from helpers import login_required, query
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
@@ -14,6 +15,7 @@ if ENV_FILE:
 app = Flask(__name__)
 app.secret_key = env.get("APP_SECRET_KEY")
 
+db = env.get("DB_CONNECTION")
 
 oauth = OAuth(app)
 
@@ -42,6 +44,17 @@ def home():
 def callback():
     token = oauth.auth0.authorize_access_token()
     session["user"] = token
+    openid_sub = str(session["user"]["userinfo"]["sub"])
+
+    # If user does not exist in users table then create an entry and generate a device registration code
+    user = query(db, 'SELECT * FROM Users WHERE openid_sub = ?', params = (openid_sub,))
+    if len(user) == 0:
+        device_code = str(uuid.uuid4())
+        query(db, "INSERT INTO Users (openid_sub, email, device_code) VALUES (?, ?, ?)", (openid_sub, session["user"]["userinfo"]["email"], device_code))
+    else:
+        print(user[0]["device_code"])
+        session["user"]["userinfo"]["device_code"] = user[0]["device_code"]
+
     return redirect("/")
 
 

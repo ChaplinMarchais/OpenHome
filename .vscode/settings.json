@@ -6,5 +6,7 @@
     "python.analysis.extraPaths": [
         "./OpenHomeServer/venv/lib64/python3.10/site-packages",
         "./OpenHomeServer"
-    ]
+    ],
+    "debugpy.showPythonInlineValues": true,
+    "python.terminal.executeInFileDir": true,
 }

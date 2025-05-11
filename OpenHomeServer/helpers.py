@@ -27,13 +27,14 @@ def query(db_name, query, params=None):
     Args:
         db_name (string): Connection string for the db
         query (string): SQL query to execute
-        params (string, optional): Optional params to pass to the SQL statement. Defaults to None.
+        params (optional): Optional params to pass to the SQL statement. Defaults to None.
 
     Returns:
         Object: Result of query
     """
     try:
         with sqlite3.connect(db_name) as conn:
+            conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             cursor.execute(query, params or ())
             
