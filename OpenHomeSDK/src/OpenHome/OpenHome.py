@@ -6,6 +6,7 @@ DEBUG_URI = "ws://127.0.0.1:3000/connect"
 
 async def connect(device_code, name):
     data = {
+        "action": "connect",
         "device_code": device_code,
         "name": name
     }

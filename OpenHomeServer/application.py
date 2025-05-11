@@ -8,6 +8,7 @@ from dotenv import find_dotenv, load_dotenv
 from flask import Flask, redirect, render_template, session, url_for
 from flask_sock import Sock, ConnectionClosed
 from helpers import *
+from database import *
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
@@ -41,12 +42,14 @@ def connect(ws):
     while connectionOpen:
         try:
             data = json.loads(ws.receive())
-            device_code = data["device_code"]
-            openid_sub = get_user_sub(db, device_code)
-            device_id = generate_device_id(device_code, openid_sub)
-            connections[device_id] = ws
 
-            print(f"Device {device_id} CONNECTED")
+            match data["action"]:
+                case "connect":
+                    device_id = generate_device_id(db, data["device_code"])
+                    connections[device_id] = ws
+
+                    print(f"Device {device_id} CONNECTED")
+
         except ConnectionClosed:
             connections[device_id] = None
             connectionOpen = False
