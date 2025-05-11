@@ -1,12 +1,13 @@
 {
     "python.analysis.include": [
         "C:\\Users\\chapm\\Harvard\\CS50\\Final\\OpenHome\\OpenHomeServer\\venv\\lib64\\python3.10\\site-packages",
-        "C:\\Users\\chapm\\Harvard\\CS50\\Final\\OpenHome\\OpenHomeServer\\venv\\lib\\python3.10\\site-packages"
+        "C:\\Users\\chapm\\Harvard\\CS50\\Final\\OpenHome\\OpenHomeServer\\venv\\lib\\python3.10\\site-packages",
+        "C:\\Users\\chapm\\Harvard\\CS50\\Final\\OpenHome\\OpenHomeSDK\\src\\OpenHome",
+        "C:\\Users\\chapm\\Harvard\\CS50\\Final\\OpenHome\\OpenHomeSDK\\src\\OpenHome\\.venv\\lib64"
     ],
     "python.analysis.extraPaths": [
         "./OpenHomeServer/venv/lib64/python3.10/site-packages",
-        "./OpenHomeServer"
-    ],
-    "debugpy.showPythonInlineValues": true,
-    "python.terminal.executeInFileDir": true,
+        "./OpenHomeServer",
+        "./OpenHomeServer/venv/lib/python3.10/site-packages"
+    ]
 }

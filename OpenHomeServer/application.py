@@ -6,6 +6,7 @@ from urllib.parse import quote_plus, urlencode
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
 from flask import Flask, redirect, render_template, session, url_for
+from flask_sock import Sock
 from helpers import login_required, query
 
 ENV_FILE = find_dotenv()
@@ -14,6 +15,7 @@ if ENV_FILE:
 
 app = Flask(__name__)
 app.secret_key = env.get("APP_SECRET_KEY")
+sock = Sock(app)
 
 db = env.get("DB_CONNECTION")
 
@@ -29,6 +31,12 @@ oauth.register(
     server_metadata_url=f'https://{env.get("AUTH0_DOMAIN")}/.well-known/openid-configuration',
 )
 
+# WS Controllers
+@sock.route('/connect')
+def connect(ws):
+    while True:
+        data = ws.receive()
+        print(data)
 
 # Controllers API
 @app.route("/")
