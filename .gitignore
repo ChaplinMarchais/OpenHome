@@ -8,3 +8,4 @@ venv
 .idea
 __pycache__
 OpenHomeServer/__pycache__/application.cpython-310.pyc
+README.md

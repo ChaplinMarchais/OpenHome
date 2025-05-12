@@ -28,8 +28,14 @@ def query(db, query, params=None):
         return None
 
 def get_user_sub(db, device_code):
-    return query(db, 'SELECT openid_sub FROM Users WHERE device_code = ?', 
+    user_sub = ""
+
+    try:
+        user_sub = query(db, 'SELECT openid_sub FROM Users WHERE device_code = ?', 
                  params = (device_code,))[0]["openid_sub"]
+    except IndexError:
+        print("Invalid device_code in client registration")
+    return user_sub
 
 def connect_device(db, device_code, name):
     openid_sub = get_user_sub(db, device_code)

@@ -4,6 +4,8 @@ This application allows for registering custom built IoT devices and managing th
 
 To utilize the system in a development environment there is a `sample.py` program that will emulate an IoT device utilizing the websocket protocol to communicate with the server.
 
+Summary video: [https://youtu.be/V58hmTWoTYc](https://youtu.be/V58hmTWoTYc)
+
 # Running the Server
 
 To run the sample, make sure you have `python3`, `python3-flask` and `pip` installed.
