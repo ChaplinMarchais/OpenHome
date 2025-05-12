@@ -6,7 +6,7 @@ certifi==2022.12.7
 charset-normalizer==3.0.1
 click==8.2.0
 colorama==0.4.4
-cryptography==3.4.8
+cryptography==44.0.1
 dbus-python==1.2.18
 debugpy==1.8.14
 diffusers==0.10.2
